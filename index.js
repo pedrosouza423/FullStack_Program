@@ -1,8 +1,12 @@
-import { criarProduto, obterTodos } from "./controller-produto.js";
+import { criarProduto, obterTodos, obterProduto } from "./controllers/controller-produto.js";
 
-// Criar um novo produto
+// Criar novo produto
 await criarProduto("Maçã", 200);
 
-// Mostrar todos os produtos
+// Obter todos
 const lista = await obterTodos();
 console.log(JSON.stringify(lista, null, 2));
+
+// Obter um específico
+const item = await obterProduto(1);
+console.log("Produto:", item?.nome ?? "Produto não encontrado");
