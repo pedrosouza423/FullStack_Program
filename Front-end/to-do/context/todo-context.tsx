@@ -1,55 +1,55 @@
-"use client"
+// context/todo-context.tsx
+"use client";
 
-import { createContext, useContext, useReducer, ReactNode } from "react"
+import { createContext, useContext, useReducer } from "react";
 
-type Todo = {
-  id: number
-  texto: string
-  feito: boolean
-}
+export type Todo = {
+  id: number;
+  texto: string;
+  feito: boolean;
+};
 
 type Action =
   | { type: "ADICIONAR"; payload: string }
-  | { type: "REMOVER"; payload: number }
   | { type: "TOGGLE"; payload: number }
+  | { type: "REMOVER"; payload: number }
+  | { type: "LIMPAR_CONCLUIDOS" };
+
+type State = Todo[];
 
 const TodoContext = createContext<{
-  todos: Todo[]
-  dispatch: React.Dispatch<Action>
-} | undefined>(undefined)
+  state: State;
+  dispatch: React.Dispatch<Action>;
+} | null>(null);
 
-function reducer(state: Todo[], action: Action): Todo[] {
+function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "ADICIONAR":
-      return [
-        ...state,
-        { id: Date.now(), texto: action.payload, feito: false }
-      ]
-    case "REMOVER":
-      return state.filter(todo => todo.id !== action.payload)
+      return [...state, { id: Date.now(), texto: action.payload, feito: false }];
     case "TOGGLE":
-      return state.map(todo =>
-        todo.id === action.payload
-          ? { ...todo, feito: !todo.feito }
-          : todo
-      )
+      return state.map((t) =>
+        t.id === action.payload ? { ...t, feito: !t.feito } : t
+      );
+    case "REMOVER":
+      return state.filter((t) => t.id !== action.payload);
+    case "LIMPAR_CONCLUIDOS":
+      return state.filter((t) => !t.feito);
     default:
-      return state
+      return state;
   }
 }
 
-export function TodoProvider({ children }: { children: ReactNode }) {
-  const [todos, dispatch] = useReducer(reducer, [])
-
+export function TodoProvider({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(reducer, []);
   return (
-    <TodoContext.Provider value={{ todos, dispatch }}>
+    <TodoContext.Provider value={{ state, dispatch }}>
       {children}
     </TodoContext.Provider>
-  )
+  );
 }
 
 export function useTodos() {
-  const context = useContext(TodoContext)
-  if (!context) throw new Error("useTodos deve estar dentro de <TodoProvider>")
-  return context
+  const ctx = useContext(TodoContext);
+  if (!ctx) throw new Error("useTodos deve ser usado dentro do TodoProvider");
+  return ctx;
 }
