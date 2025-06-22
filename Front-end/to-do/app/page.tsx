@@ -1,97 +1,95 @@
 "use client";
 
-import { useState } from "react";
-import { useTodos } from "@/context/todo-context";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2 } from "lucide-react";
+import { useTodos } from "@/context/todo-context";
+import { useState } from "react";
+import { CheckSquare, Square, Trash2 } from "lucide-react";
 
 export default function Home() {
   const { state, dispatch } = useTodos();
   const [texto, setTexto] = useState("");
 
-  function handleAdd() {
+  function adicionarTarefa() {
     if (!texto.trim()) return;
-    dispatch({ type: "ADICIONAR", payload: texto.trim() });
+    dispatch({ type: "ADICIONAR", payload: texto });
     setTexto("");
   }
 
+  function removerConcluidas() {
+    state
+      .filter((todo) => todo.feito)
+      .forEach((todo) =>
+        dispatch({ type: "REMOVER", payload: todo.id })
+      );
+  }
+
   return (
-    <div className="mx-auto max-w-2xl space-y-6 p-6">
-      {/* Caixa principal */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-center text-3xl">Lista de Tarefas</CardTitle>
-        </CardHeader>
+    <div className="min-h-screen bg-zinc-900 text-white flex items-center justify-center p-6">
+      <div className="w-full max-w-2xl bg-zinc-100 text-zinc-900 p-8 rounded-2xl shadow-lg space-y-6">
+        <h1 className="text-3xl font-bold text-center">📝 Lista de Tarefas</h1>
 
-        <CardContent className="space-y-6">
-          {/* Formulário */}
-          <div className="flex gap-2">
-            <Input
-              placeholder="Digite uma tarefa"
-              value={texto}
-              onChange={(e) => setTexto(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-            />
-            <Button onClick={handleAdd}>Adicionar</Button>
-          </div>
+        <div className="flex gap-2">
+          <Input
+            className="bg-white border-zinc-300"
+            placeholder="Digite uma tarefa"
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+          />
+          <Button onClick={adicionarTarefa}>Adicionar</Button>
+        </div>
 
-          {/* Lista */}
-          <ul className="space-y-2 max-h-[50vh] overflow-auto">
-            {state.map((todo) => (
-              <li
-                key={todo.id}
-                className="flex items-center justify-between rounded-md border p-3 transition-colors hover:bg-muted/50"
-              >
-                <div className="flex items-center gap-3">
-                  <Checkbox
-                    checked={todo.feito}
-                    onCheckedChange={() =>
-                      dispatch({ type: "TOGGLE", payload: todo.id })
-                    }
-                    aria-label="Marcar concluída"
-                  />
-                  <span
-                    className={`select-none ${
-                      todo.feito ? "line-through text-muted-foreground" : ""
-                    }`}
-                  >
-                    {todo.texto}
-                  </span>
-                </div>
+        {state.length > 0 && (
+          <Button
+            variant="secondary"
+            className="w-full"
+            onClick={removerConcluidas}
+          >
+            Remover Concluídas
+          </Button>
+        )}
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Remover tarefa"
-                  onClick={() => dispatch({ type: "REMOVER", payload: todo.id })}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </li>
-            ))}
-
-            {state.length === 0 && (
-              <p className="text-center text-muted-foreground">
-                Nenhuma tarefa cadastrada
-              </p>
-            )}
-          </ul>
-
-          {/* Rodapé */}
-          {state.some((t) => t.feito) && (
-            <Button
-              variant="destructive"
-              className="w-full"
-              onClick={() => dispatch({ type: "LIMPAR_CONCLUIDOS" })}
+        <ul className="space-y-3">
+          {state.map((todo) => (
+            <li
+              key={todo.id}
+              className="flex justify-between items-center bg-white p-4 rounded-lg border hover:shadow transition"
             >
-              Limpar concluídas
-            </Button>
-          )}
-        </CardContent>
-      </Card>
+              <div
+                className="flex items-center gap-3 cursor-pointer"
+                onClick={() =>
+                  dispatch({ type: "TOGGLE", payload: todo.id })
+                }
+              >
+                {todo.feito ? (
+                  <CheckSquare className="text-green-500" />
+                ) : (
+                  <Square className="text-zinc-400" />
+                )}
+                <span
+                  className={`${
+                    todo.feito
+                      ? "line-through text-zinc-500"
+                      : "text-zinc-900"
+                  }`}
+                >
+                  {todo.texto}
+                </span>
+              </div>
+
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={() =>
+                  dispatch({ type: "REMOVER", payload: todo.id })
+                }
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
