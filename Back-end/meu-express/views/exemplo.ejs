@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Lista de Pessoas</title>
+    <style>
+      body{font-family:Arial, sans-serif;padding:32px}
+      table{border-collapse:collapse;width:400px}
+      td, th{border:1px solid #999;padding:8px;text-align:left}
+      a{color:#0066cc;text-decoration:none}
+      a:hover{text-decoration:underline}
+    </style>
+  </head>
+
+  <body>
+    <h1>Lista de Pessoas</h1>
+
+    <table>
+      <tr><th>Nome</th><th>Idade</th></tr>
+
+      <% pessoas.forEach((obj, idx) => { %>
+        <tr>
+          <td>
+            <a href="/pessoa/<%= idx %>"><%= obj.nome %></a>
+          </td>
+          <td><%= obj.idade %></td>
+        </tr>
+      <% }); %>
+    </table>
+  </body>
+</html>

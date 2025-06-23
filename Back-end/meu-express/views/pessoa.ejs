@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Detalhes de <%= pessoa.nome %></title>
+    <style>
+      body{font-family:Arial, sans-serif;background:#f4f4f4;padding:40px}
+      .card{background:#fff;padding:24px;border-radius:8px;max-width:400px;
+            margin:auto;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+      h1{margin-top:0}
+      .back{display:inline-block;margin-top:12px}
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>Detalhes</h1>
+
+      <p><strong>Nome:</strong> <%= pessoa.nome %></p>
+      <p><strong>Idade:</strong> <%= pessoa.idade %> anos</p>
+
+      <a class="back" href="/exemplo">← Voltar à lista</a>
+    </div>
+  </body>
+</html>
