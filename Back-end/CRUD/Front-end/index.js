@@ -26,8 +26,19 @@ const obterDados = async() => {
  const defesaStr = await ler("Defesa:");
  return [nomeStr, eval(ataqueStr), eval(defesaStr)];
 }
-const alterar = async () => { }
-const excluir = async () => { }
+
+const alterar = async () => {
+ const idStr = await ler("ID do personagem a alterar:");
+    const id = eval(idStr);
+    const [nome, ataque, defesa] = await obterDados();
+    await cliente.alterar(id, nome, ataque, defesa);
+}
+
+const excluir = async () => {
+ const idStr = await ler("ID do personagem a excluir:");
+    const id = eval(idStr);
+    await cliente.excluir(id);
+}
 
 const listar = async () => {
  const dados = await cliente.obterTodos();

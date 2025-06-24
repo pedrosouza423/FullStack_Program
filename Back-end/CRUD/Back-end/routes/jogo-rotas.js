@@ -14,4 +14,12 @@ router.post('/', async(req,res)=>{
  let dados = await dao.create(req.body);
  res.json(dados);
 })
+router.put('/:id', async(req,res)=>{
+ let dados = await dao.update(req.params.id, req.body);
+ res.json(dados);
+})
+router.delete('/:id', async(req,res)=>{
+ let dados = await dao.delete(req.params.id);
+ res.json(dados);
+})
 module.exports = router
