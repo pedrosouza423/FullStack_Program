@@ -8,3 +8,5 @@ app.use(bodyParser.json());
 app.use('/notas', rotaNotas); 
 
 app.listen(3000, () => console.log("Servidor pronto em http://localhost:3000"));
+
+module.exports = app; 
