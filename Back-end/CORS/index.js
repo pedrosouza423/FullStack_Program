@@ -3,13 +3,17 @@ const cors = require('cors');
 
 const app = express();
 
-// Permitir qualquer origem (modo aberto — apenas para testes)
 app.use(cors({ origin: '*' }));
 
-// Para conseguir processar JSON no corpo das requisições
 app.use(express.json());
 
-// Exemplo de rota simples
+const authRouter = require('./routes/auth-router');
+const userRouter = require('./routes/user-router');
+
+app.use('/auth', authRouter);   
+app.use('/api', userRouter);     
+
+
 app.get('/', (req, res) => {
   res.json({ mensagem: 'API funcionando com CORS liberado' });
 });
