@@ -1,0 +1,41 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Notas",
+    "version": "1.0.0",
+    "description": "API para gerenciamento de notas com autenticação"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local"
+    }
+  ],
+  "paths": {
+    "/notas": {
+      "get": {
+        "summary": "Lista todas as notas",
+        "responses": {
+          "200": {
+            "description": "Lista de notas"
+          }
+        }
+      },
+      "post": {
+        "summary": "Cria uma nova nota",
+        "responses": {
+          "201": {
+            "description": "Nota criada com sucesso"
+          }
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
